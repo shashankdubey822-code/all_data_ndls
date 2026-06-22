@@ -1,0 +1,23 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+.venv/
+env/
+ENV/
+backend/.env
+
+# Local database and uploads
+backend/railsense.db
+backend/railsense.db-journal
+uploads/*
+!uploads/.gitkeep
+
+# IDEs and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db

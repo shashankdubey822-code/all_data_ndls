@@ -1,0 +1,581 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LHB Coach Maintenance | AI & Computer Vision Diagnostic System</title>
+  <meta name="description" content="AI-powered multi-component inspection system for Indian Railways LHB Fiat Bogie using Computer Vision — CBC Coupler, Axle Box, Brake Disk, Damper, Coil Spring, Wheel." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="/static/style.css" />
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════
+     LHB COACH LOADING SCREEN (5 Seconds)
+     ═══════════════════════════════════════════════ -->
+<div id="loading-screen">
+  <div class="vb-logo-container">
+    <div class="vb-train-silhouette">
+      <svg class="vb-nose-svg" viewBox="0 0 120 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <!-- Rails -->
+        <rect x="8" y="68" width="104" height="3" rx="1.5" fill="#94a3b8"/>
+        <rect x="12" y="72" width="3" height="6" fill="#94a3b8"/>
+        <rect x="25" y="72" width="3" height="6" fill="#94a3b8"/>
+        <rect x="92" y="72" width="3" height="6" fill="#94a3b8"/>
+        <rect x="105" y="72" width="3" height="6" fill="#94a3b8"/>
+        <!-- Coach Body -->
+        <rect x="12" y="24" width="96" height="40" rx="4" fill="#ffffff" stroke="#003893" stroke-width="3"/>
+        <!-- Roof -->
+        <path d="M14 24 Q60 14 106 24" stroke="#64748b" stroke-width="2.5" fill="#e2e8f0"/>
+        <!-- Window Row -->
+        <rect x="20" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <rect x="34" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <rect x="48" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <rect x="62" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <rect x="76" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <rect x="90" y="30" width="10" height="12" rx="2" fill="#bfdbfe" stroke="#003893" stroke-width="1.5"/>
+        <!-- Red Band (LHB characteristic) -->
+        <rect x="12" y="46" width="96" height="10" fill="#dc2626"/>
+        <!-- Gray Skirt -->
+        <rect x="12" y="56" width="96" height="8" rx="0 0 4 4" fill="#94a3b8"/>
+        <!-- Door -->
+        <rect x="54" y="26" width="12" height="30" rx="1" fill="#e2e8f0" stroke="#003893" stroke-width="1.5"/>
+        <line x1="60" y1="26" x2="60" y2="56" stroke="#003893" stroke-width="1"/>
+        <!-- Wheels -->
+        <circle cx="28" cy="68" r="6" fill="#334155" stroke="#003893" stroke-width="2"/>
+        <circle cx="28" cy="68" r="2" fill="#94a3b8"/>
+        <circle cx="92" cy="68" r="6" fill="#334155" stroke="#003893" stroke-width="2"/>
+        <circle cx="92" cy="68" r="2" fill="#94a3b8"/>
+        <!-- Bogie Frame -->
+        <rect x="18" y="64" width="20" height="3" rx="1" fill="#475569"/>
+        <rect x="82" y="64" width="20" height="3" rx="1" fill="#475569"/>
+      </svg>
+    </div>
+  </div>
+  <h1 class="loading-title">LHB Coach Maintenance</h1>
+  <p class="loading-subtitle">using AI &amp; Computer Vision · Indian Railways</p>
+  <p class="loading-desc">
+    Deploying advanced Computer Vision and Deep Learning algorithms to perform safety-critical structural inspection of passenger LHB Fiat Bogies.
+  </p>
+  <div class="loader-progress-wrap">
+    <div class="loader-progress-bar"></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
+     SIDEBAR NAVIGATION
+     ═══════════════════════════════════════════════ -->
+<aside class="sidebar" id="sidebar">
+  <!-- Sidebar Brand — Indian Railways logo + brand title -->
+  <div class="sidebar-brand">
+    <!-- Indian Railways official logo -->
+    <div class="ir-logo-wrap">
+      <img src="/static/ir_logo.png" alt="Indian Railways" class="ir-logo-img" />
+    </div>
+    <div class="brand-text">
+      <span class="brand-name">LHB Coach</span>
+      <span class="brand-name" style="font-size:13px;letter-spacing:.5px">Maintenance</span>
+      <span class="brand-sub" style="font-size:9px;line-height:1.3">using AI &amp; Computer Vision</span>
+    </div>
+  </div>
+
+  <div class="sidebar-top-action" style="padding: 12px 14px 0 14px; display: flex; justify-content: center;">
+    <button class="sidebar-collapse-btn" id="sidebar-collapse-btn" onclick="collapseSidebar()" style="width: 100%; margin-top: 0;">
+      <i class="fa-solid fa-angles-left" id="collapse-icon"></i>
+      <span>Collapse</span>
+    </button>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a class="nav-item active" data-tab="dashboard" id="nav-dashboard" onclick="switchTab('dashboard')">
+      <i class="fa-solid fa-gauge-high"></i><span>Dashboard</span>
+    </a>
+    <a class="nav-item" data-tab="inspector" id="nav-inspector" onclick="switchTab('inspector')">
+      <i class="fa-solid fa-magnifying-glass-chart"></i><span>Live Inspector</span>
+      <span class="nav-badge" id="badge-inspector"></span>
+    </a>
+    <a class="nav-item" data-tab="dataset" id="nav-dataset" onclick="switchTab('dataset')">
+      <i class="fa-solid fa-images"></i><span>Dataset Explorer</span>
+    </a>
+    <a class="nav-item" data-tab="logs" id="nav-logs" onclick="switchTab('logs')">
+      <i class="fa-solid fa-clipboard-list"></i><span>Inspection Logs</span>
+    </a>
+    <a class="nav-item" data-tab="training" id="nav-training" onclick="switchTab('training')">
+      <i class="fa-solid fa-brain"></i><span>Model Training</span>
+    </a>
+    <a class="nav-item" href="/static/LHB_Coach_Maintenance_User_Manual.pdf" target="_blank" id="nav-guide">
+      <i class="fa-solid fa-book"></i><span>User Guide</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-footer">
+    <!-- Small IR logo mark in footer -->
+    <div class="footer-ir-row">
+      <img src="/static/ir_logo.png" alt="IR" style="width:22px;height:22px;border-radius:50%;object-fit:cover;opacity:0.85;flex-shrink:0" />
+      <span class="footer-ir-label">Indian Railways</span>
+    </div>
+    <div class="system-badge"><i class="fa-solid fa-shield-halved"></i><span class="footer-badge-text">RDSO Compliant</span></div>
+    <div class="irctc-badge"><span class="footer-badge-text">NDLS Depot · New Delhi Division</span></div>
+  </div>
+</aside>
+
+
+<!-- ═══════════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════════ -->
+<main class="main-content">
+
+  <!-- TOP BAR -->
+  <header class="topbar">
+    <div class="topbar-left">
+      <button class="menu-toggle" onclick="toggleSidebar()"><i class="fa-solid fa-bars"></i></button>
+      <div class="page-title" id="page-title">Command Dashboard</div>
+    </div>
+    <div class="topbar-right">
+      <!-- Live clock -->
+      <div class="time-display" id="time-display"></div>
+      <div class="topbar-divider"></div>
+      <!-- Counterpoint partner logo — far right -->
+      <div class="counterpoint-logo-wrap" title="Powered by Counterpoint">
+        <img src="/static/counterpoint_logo.png" alt="Counterpoint" class="counterpoint-logo-img" />
+      </div>
+    </div>
+  </header>
+
+
+  <!-- ───────────── TAB: DASHBOARD ───────────── -->
+  <section class="tab-panel active" id="tab-dashboard">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon blue"><i class="fa-solid fa-clipboard-check"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="stat-total">—</div>
+          <div class="stat-label">Total Inspections</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon green"><i class="fa-solid fa-circle-check"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="stat-fit">—</div>
+          <div class="stat-label">FIT FOR RUN</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon red"><i class="fa-solid fa-triangle-exclamation"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="stat-unfit">—</div>
+          <div class="stat-label">UNFIT / DEFECTIVE</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon amber"><i class="fa-solid fa-eye"></i></div>
+        <div class="stat-body">
+          <div class="stat-value" id="stat-monitor">—</div>
+          <div class="stat-label">MONITOR</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Component Status Grid -->
+    <div class="card component-status-card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-train"></i> LHB Fiat Bogie — Component Dataset Status</span>
+      </div>
+      <div class="component-status-grid" id="component-status-grid">
+        <div class="loading-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading...</div>
+      </div>
+    </div>
+
+    <div class="dash-row">
+      <div class="card chart-card">
+        <div class="card-header"><span><i class="fa-solid fa-chart-pie"></i> Inspection Summary</span></div>
+        <div class="chart-wrap"><canvas id="summaryChart"></canvas></div>
+      </div>
+      <div class="card chart-card">
+        <div class="card-header"><span><i class="fa-solid fa-chart-line"></i> Recent Trend</span></div>
+        <div class="chart-wrap"><canvas id="trendChart"></canvas></div>
+      </div>
+    </div>
+
+    <div class="card recent-card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-clock-rotate-left"></i> Recent Inspections</span>
+        <button class="btn btn-sm btn-ghost" onclick="switchTab('logs')">View All</button>
+      </div>
+      <div id="recent-list" class="recent-list">
+        <div class="empty-state"><i class="fa-solid fa-inbox"></i><p>No inspections yet</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── TAB: LIVE INSPECTOR ───────────── -->
+  <section class="tab-panel" id="tab-inspector">
+
+    <!-- Component Selector -->
+    <div class="card component-selector-card">
+      <div class="card-header"><i class="fa-solid fa-cogs"></i> Select Bogie Component to Inspect</div>
+      <div class="component-grid" id="component-grid">
+        <button class="comp-btn active" data-comp="coupler" onclick="selectComponent('coupler', this)">
+          <i class="fa-solid fa-link"></i>
+          <span class="comp-name">CBC Coupler</span>
+          <span class="comp-sub">H-Type Tightlock</span>
+        </button>
+        <button class="comp-btn" data-comp="axle_box" onclick="selectComponent('axle_box', this)">
+          <i class="fa-solid fa-circle-dot"></i>
+          <span class="comp-name">Axle Box</span>
+          <span class="comp-sub">Roller Bearing Assembly</span>
+        </button>
+        <button class="comp-btn" data-comp="brake_disk" onclick="selectComponent('brake_disk', this)">
+          <i class="fa-solid fa-circle-half-stroke"></i>
+          <span class="comp-name">Brake Disk</span>
+          <span class="comp-sub">Ventilated Disk</span>
+        </button>
+        <button class="comp-btn" data-comp="damper" onclick="selectComponent('damper', this)">
+          <i class="fa-solid fa-arrows-up-down"></i>
+          <span class="comp-name">Damper</span>
+          <span class="comp-sub">Primary / Secondary</span>
+        </button>
+        <button class="comp-btn" data-comp="spring" onclick="selectComponent('spring', this)">
+          <i class="fa-solid fa-wave-square"></i>
+          <span class="comp-name">Coil Spring</span>
+          <span class="comp-sub">Helical Suspension</span>
+        </button>
+        <button class="comp-btn" data-comp="wheel" onclick="selectComponent('wheel', this)">
+          <i class="fa-solid fa-circle"></i>
+          <span class="comp-name">Wheel</span>
+          <span class="comp-sub">Wheel Set / Tread</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Auto-Detect Banner -->
+    <div class="auto-detect-banner" id="auto-detect-banner" style="display:none">
+      <div class="auto-detect-inner">
+        <div class="auto-detect-icon"><i class="fa-solid fa-brain" id="auto-detect-icon-fa"></i></div>
+        <div class="auto-detect-text">
+          <div class="auto-detect-title" id="auto-detect-title">Detecting component…</div>
+          <div class="auto-detect-sub" id="auto-detect-sub">Running all 6 CNN models in parallel</div>
+        </div>
+        <div class="auto-detect-scores" id="auto-detect-scores"></div>
+      </div>
+    </div>
+
+    <div class="inspector-grid">
+      <!-- LEFT: Upload + Metadata -->
+      <div class="inspector-left">
+        <div class="card">
+          <div class="card-header"><i class="fa-solid fa-id-card"></i> Coach Metadata</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Coach Number</label>
+              <input type="text" id="inp-coach-number" placeholder="e.g. 03524" />
+            </div>
+            <div class="form-group">
+              <label>LHB Coach Type</label>
+              <select id="inp-coach-type">
+                <option value="LHB General Coach">General Coach</option>
+                <option value="LHB Sleeper">Sleeper</option>
+                <option value="LHB AC 1">AC 1</option>
+                <option value="LHB AC 2">AC 2</option>
+                <option value="LHB AC 3">AC 3</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Depot / Workshop</label>
+              <input type="text" id="inp-depot" placeholder="e.g. NDLS Depot" />
+            </div>
+            <div class="form-group">
+              <label>Railway Zone</label>
+              <select id="inp-zone">
+                <option value="">-- Select Zone --</option>
+                <option>Central Railway (CR)</option>
+                <option>Eastern Railway (ER)</option>
+                <option>Northern Railway (NR)</option>
+                <option>North Eastern Railway (NER)</option>
+                <option>Northeast Frontier Railway (NFR)</option>
+                <option>Southern Railway (SR)</option>
+                <option>South Central Railway (SCR)</option>
+                <option>South Eastern Railway (SER)</option>
+                <option>Western Railway (WR)</option>
+                <option>South Western Railway (SWR)</option>
+                <option>North Western Railway (NWR)</option>
+                <option>West Central Railway (WCR)</option>
+                <option>East Central Railway (ECR)</option>
+                <option>East Coast Railway (ECoR)</option>
+                <option>North Central Railway (NCR)</option>
+                <option>South East Central Railway (SECR)</option>
+                <option>Metro Railway Kolkata (MR)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Inspector Name</label>
+              <input type="text" id="inp-inspector" placeholder="Name of inspector" />
+            </div>
+
+            <div class="form-group full-span">
+              <label>Inspector Notes</label>
+              <textarea id="inp-notes" rows="2" placeholder="Any visual observations…"></textarea>
+            </div>
+          </div>
+        </div>
+
+        <!-- Upload Zone -->
+        <div class="card upload-card">
+
+          <!-- Dynamic Header: updates when component changes -->
+          <div class="upload-card-header">
+            <div class="upload-header-icon" id="upload-header-icon">
+              <i class="fa-solid fa-link" id="upload-header-fa"></i>
+            </div>
+            <div class="upload-header-text">
+              <div class="upload-header-title">
+                <span id="upload-label">CBC Coupler</span>
+                <span class="upload-header-badge" id="upload-ready-badge" style="display:none">
+                  <i class="fa-solid fa-circle-check"></i> Ready
+                </span>
+              </div>
+              <div class="upload-header-sub" id="upload-header-sub">H-Type Tightlock · Bogie Component</div>
+            </div>
+            <div class="upload-header-action" id="upload-status-tag">
+              <span class="upload-tag waiting">
+                <i class="fa-solid fa-hourglass-start"></i> Awaiting Image
+              </span>
+            </div>
+          </div>
+
+          <!-- Divider -->
+          <div class="upload-divider"></div>
+
+          <!-- Drop Zone -->
+          <div class="drop-zone" id="drop-zone" onclick="document.getElementById('file-input').click()">
+            <input type="file" id="file-input" accept="image/*" style="display:none" onchange="handleFileSelect(event)" />
+            <div class="drop-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+            <div class="drop-text">Drag & drop or <span class="link">click to browse</span></div>
+            <div class="drop-sub" id="drop-hint-text">Upload a photo of the <strong id="drop-comp-hint">CBC Coupler</strong> for AI inspection</div>
+            <div class="drop-formats">JPG · JPEG · PNG · WEBP &nbsp;·&nbsp; Max 20 MB</div>
+          </div>
+
+          <!-- Rich Preview Panel (shown after file selected) -->
+          <div id="preview-wrap" class="preview-wrap" style="display:none">
+            <div class="preview-thumb-wrap">
+              <img id="preview-img" class="preview-img" src="" alt="Preview" />
+              <div class="preview-thumb-overlay"><i class="fa-solid fa-eye"></i></div>
+            </div>
+            <div class="preview-info">
+              <div class="preview-filename" id="preview-filename">image.jpg</div>
+              <div class="preview-filesize" id="preview-filesize">—</div>
+              <div class="preview-comp-tag" id="preview-comp-tag">
+                <i class="fa-solid fa-link"></i>
+                <span id="preview-comp-name">CBC Coupler</span>
+              </div>
+            </div>
+            <button class="preview-remove-btn" onclick="clearPreview()">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </div>
+
+          <!-- Run Button -->
+          <button class="btn btn-primary run-btn" id="run-btn" onclick="runInspection()">
+            <i class="fa-solid fa-play"></i> Run AI Inspection
+          </button>
+        </div>
+      </div>
+
+      <!-- RIGHT: Results Panel -->
+      <div class="inspector-right">
+        <div class="card result-card" id="result-card">
+          <div class="scanning-state" id="scanning-state">
+            <div class="scanner-ring"></div>
+            <div class="scanner-text">Awaiting image upload…</div>
+          </div>
+
+          <div class="result-content" id="result-content" style="display:none">
+
+            <!-- Status Banner -->
+            <div class="status-banner" id="status-banner">
+              <div class="status-icon" id="status-icon"><i class="fa-solid fa-circle-check"></i></div>
+              <div class="status-text">
+                <div class="status-label" id="status-label">FIT FOR RUN</div>
+                <div class="status-sub" id="status-sub">All components nominal</div>
+              </div>
+              <div class="confidence-ring-wrap">
+                <canvas id="confidence-ring" width="80" height="80"></canvas>
+                <div class="confidence-value" id="confidence-value">—%</div>
+              </div>
+            </div>
+
+            <!-- Component Badge -->
+            <div class="component-result-badge" id="component-result-badge"></div>
+
+            <!-- Bounding Box Image -->
+            <div class="bbox-wrap" id="bbox-wrap" style="display:none">
+              <div class="card-header"><i class="fa-solid fa-vector-square"></i> Defect Localization</div>
+              <div class="canvas-container" id="canvas-container">
+                <img id="result-img" src="" alt="Analyzed image" />
+                <canvas id="bbox-canvas"></canvas>
+              </div>
+              <div class="bbox-legend" id="bbox-legend"></div>
+            </div>
+
+            <!-- Metrics Row -->
+            <div class="metrics-row">
+              <div class="metric-chip">
+                <span class="metric-label">Defect Score</span>
+                <span class="metric-value" id="m-defect">—</span>
+                <span class="metric-range" id="m-defect-range">0–20 GOOD · 21–40 MINOR · 41–60 WARN · 61–80 HIGH · 81–100 CRITICAL</span>
+              </div>
+              <div class="metric-chip">
+                <span class="metric-label">Rust Level</span>
+                <span class="metric-value" id="m-rust">—</span>
+                <span class="metric-range">0–5% Normal · 5–15% Elevated · &gt;15% High Corrosion</span>
+              </div>
+              <div class="metric-chip">
+                <span class="metric-label">Oil / Fluid</span>
+                <span class="metric-value" id="m-oil">—</span>
+                <span class="metric-range">0–5% Clean · 5–10% Monitor · &gt;10% Leakage Risk</span>
+              </div>
+              <div class="metric-chip">
+                <span class="metric-label">Edge Anomaly</span>
+                <span class="metric-value" id="m-edge">—</span>
+                <span class="metric-range">0–10% Normal · 10–18% Irregular · &gt;18% Critical</span>
+              </div>
+              <div class="metric-chip">
+                <span class="metric-label">Alignment</span>
+                <span class="metric-value" id="m-align">—</span>
+                <span class="metric-range">NORMAL = Within spec · DEVIATION = Inspect geometry</span>
+              </div>
+            </div>
+
+            <!-- AI Checklist -->
+            <div class="checklist-section" id="checklist-section" style="display:none">
+              <div class="card-header"><i class="fa-solid fa-list-check"></i> AI Diagnostic Checklist</div>
+              <div id="checklist-items"></div>
+              <div class="ai-diagnosis" id="ai-diagnosis"></div>
+              <div class="risk-badge-row">
+                <div class="risk-badge" id="risk-badge"></div>
+                <div class="action-text" id="action-text"></div>
+              </div>
+            </div>
+
+            <!-- Workshop Decision -->
+            <div class="decision-bar" id="decision-bar">
+              <i class="fa-solid fa-stamp"></i>
+              <span id="decision-text">—</span>
+            </div>
+
+            <!-- Export -->
+            <button class="btn btn-outline full-width" id="export-btn" onclick="exportReport()" style="display:none">
+              <i class="fa-solid fa-file-pdf"></i> Print / Export Inspection Report
+            </button>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── TAB: DATASET EXPLORER ───────────── -->
+  <section class="tab-panel" id="tab-dataset">
+    <div class="card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-folder-open"></i> LHB Bogie Component Dataset</span>
+        <div class="dataset-filter-row" id="dataset-filter-row">
+          <div class="filter-chips" id="comp-filter-chips">
+            <button class="chip active" onclick="filterDatasetComp('all', this)">All Components</button>
+            <button class="chip" data-comp="coupler"    onclick="filterDatasetComp('coupler', this)">CBC Coupler</button>
+            <button class="chip" data-comp="axle_box"   onclick="filterDatasetComp('axle_box', this)">Axle Box</button>
+            <button class="chip" data-comp="brake_disk" onclick="filterDatasetComp('brake_disk', this)">Brake Disk</button>
+            <button class="chip" data-comp="damper"     onclick="filterDatasetComp('damper', this)">Damper</button>
+            <button class="chip" data-comp="spring"     onclick="filterDatasetComp('spring', this)">Spring</button>
+            <button class="chip" data-comp="wheel"      onclick="filterDatasetComp('wheel', this)">Wheel</button>
+          </div>
+          <div class="filter-chips">
+            <button class="chip chip-green active" onclick="filterDatasetLabel('all', this)">All</button>
+            <button class="chip chip-green" onclick="filterDatasetLabel('normal', this)">Normal</button>
+            <button class="chip chip-red"   onclick="filterDatasetLabel('defect', this)">Defective</button>
+          </div>
+        </div>
+      </div>
+      <div id="dataset-grid" class="dataset-grid">
+        <div class="loading-spinner"><i class="fa-solid fa-circle-notch fa-spin"></i> Loading images…</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── TAB: INSPECTION LOGS ───────────── -->
+  <section class="tab-panel" id="tab-logs">
+    <div class="card">
+      <div class="card-header">
+        <span><i class="fa-solid fa-table-list"></i> Inspection History</span>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <select id="log-comp-filter" style="background:var(--bg-700);border:1px solid var(--border);color:var(--text-300);border-radius:6px;padding:5px 10px;font-size:12px;font-family:Outfit,sans-serif;" onchange="loadHistory()">
+            <option value="">All Components</option>
+            <option value="coupler">CBC Coupler</option>
+            <option value="axle_box">Axle Box</option>
+            <option value="brake_disk">Brake Disk</option>
+            <option value="damper">Damper</option>
+            <option value="spring">Coil Spring</option>
+            <option value="wheel">Wheel</option>
+          </select>
+          <button class="btn btn-sm btn-ghost" onclick="loadHistory()"><i class="fa-solid fa-rotate"></i> Refresh</button>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="data-table" id="history-table">
+          <thead>
+            <tr>
+              <th>ID</th><th>Date & Time</th><th>Component</th><th>Coach No.</th>
+              <th>Zone</th><th>Status</th><th>Confidence</th><th>AI Model</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="history-tbody">
+            <tr><td colspan="9" class="empty-row"><i class="fa-solid fa-inbox"></i> No records found</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ───────────── TAB: MODEL TRAINING ───────────── -->
+  <section class="tab-panel" id="tab-training">
+    <div class="card">
+      <div class="card-header"><i class="fa-solid fa-dumbbell"></i> Per-Component CNN Model Training</div>
+      <div class="training-info">
+        <div class="info-row"><i class="fa-solid fa-network-wired"></i> Architecture: <strong>MobileNetV2</strong> (ImageNet pre-trained, fine-tuned per component)</div>
+        <div class="info-row"><i class="fa-solid fa-gears"></i> Augmentation: Flip, Rotate, ColorJitter, WeightedSampler (handles class imbalance)</div>
+        <div class="info-row"><i class="fa-solid fa-circle-info"></i> Epochs: <strong>30</strong> with CosineAnnealingLR scheduler</div>
+      </div>
+
+      <div class="train-component-grid" id="train-component-grid">
+        <!-- populated by JS -->
+      </div>
+
+      <div class="train-log-wrap" id="train-log-wrap" style="display:none">
+        <div class="card-header"><i class="fa-solid fa-terminal"></i> Training Log — <span id="train-log-comp"></span></div>
+        <div class="train-log" id="train-log"></div>
+        <div class="progress-bar-wrap"><div class="progress-bar" id="train-progress-bar"></div></div>
+      </div>
+    </div>
+  </section>
+
+
+
+</main>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <div class="lightbox-inner" onclick="event.stopPropagation()">
+    <img id="lightbox-img" src="" alt="" />
+    <div class="lightbox-label" id="lightbox-label"></div>
+    <button class="lightbox-close" onclick="closeLightbox()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+</div>
+
+<script src="/static/app.js"></script>
+</body>
+</html>
